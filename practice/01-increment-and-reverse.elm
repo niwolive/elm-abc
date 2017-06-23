@@ -34,18 +34,19 @@ view : Model -> Html Msg
 view model =
   div []
     [ details []
-        [ summary [] [
-            h3 [] [ text "Reverse a string" ]
-          ]
-        , input [ placeholder "Type some text to reverse"
+        [ summary []
+            [ h3 [] [ text "Reverse a string" ]
+            ]
+        , input
+            [ placeholder "Type some text to reverse"
             , onInput Change
-          ] []
+            ] []
         , p [] [ text model.reversed ]
         ]
     , details []
-        [ summary [] [
-            h3 [] [ text "Increment/Decrement" ]
-          ]
+        [ summary []
+            [ h3 [] [ text "Increment/Decrement" ]
+            ]
         , button [ onClick Decrement ] [ text "-" ]
         , text (toString model.count)
         , button [ onClick Increment ] [ text "+" ]
