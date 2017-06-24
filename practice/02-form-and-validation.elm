@@ -1,13 +1,13 @@
 import Html exposing (..)
-import Attributes exposing (..)
-import Html.events exposing (onInput, onClick)
+import Html.Attributes exposing (..)
+import Html.Events exposing (onInput, onClick)
 
 main =
   Html.beginnerProgram { model = model, view = view, update = update }
 
 
 -- MODEL
-type Model =
+type alias Model =
   { name: String
   , pass: String
   , passConfirmation: String
@@ -26,22 +26,22 @@ type Msg
   | ValidateForm Model
 
 
-update: Msg -> Model
-update msg =
+update: Msg -> Model -> Model
+update msg model =
   case msg of
     NameUpdate x ->
-      { model | model.name = x }
+      { model | name = x }
 
     PassUpdate x ->
-      { model | model.pass = x }
+      { model | pass = x }
 
     PassConfirmationUpdate x ->
-      { model | model.passConfirmation = x }
+      { model | passConfirmation = x }
 
     ValidateForm model ->
-      case passwordsMatch (model.pass, model.passConfirmation) of
-        true -> { model }
-        false -> { model | validation = "password don't match" }
+      if passwordsMatch (model.pass, model.passConfirmation)
+        then { model | errors = "" }
+        else { model | errors = "password don't match" }
 
 
 
@@ -56,10 +56,10 @@ view model =
         , onInput PassConfirmationUpdate
         , placeholder "Confirm password"
         ] []
-    , input [ onInput ValidateForm model ] []
+    , input [ type_ "button", onClick (ValidateForm model), value "Submit" ] []
     , text model.errors
     ]
 
-passwordsMatch : String * String -> Boolean
-passwordsMatch pass confirm =
-  pass === confirm
+passwordsMatch : (String, String) -> Bool
+passwordsMatch (pass, confirm) =
+  pass == confirm
